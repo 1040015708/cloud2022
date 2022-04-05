@@ -1,0 +1,40 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+    gateway:
+      discovery:
+        locator:
+          enabled: true #开启从注册中心动态创建路由的功能，利用微服务名进行路由
+      routes:
+          - id: payment_route # 路由的id,没有规定规则但要求唯一,建议配合服务名
+            #匹配后提供服务的路由地址
+#            uri: http://localhost:8001
+            uri: lb://consul-provider-payment
+            predicates:
+              - Path=/payment/consul
+              - After=2022-04-01T16:31:28.645+08:00[Asia/Shanghai]
+#              - Cookie=username,zzyy
+#              - Header=X-Request-Id,\d+ #请求头要有X-Request-Id属性并且值为数字
+#              - Method=GET
+#              - Query=username,/d+ #要带有参数名并且值为数字
+#              - Path=/user2/** # 断言，路径相匹配的进行路由*/
+
+#        - id: payment_route
+#        uri: http://localhost:8001
+#        predicates:
+#         - Path=/user2/**
+#        - id: payment_route1  #路由的ID，没有固定规则但要求唯一，建议配合服务名
+#        uri: http://localhost:8001 #匹配后提供服务的路由地址
+#        predicates:          # 断言，路径相匹配的进行路由
+#          - Path=/create/user/
+
+
