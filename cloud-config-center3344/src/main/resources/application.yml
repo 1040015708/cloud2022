@@ -1,0 +1,32 @@
+server:
+  port: 3344
+
+spring:
+  application:
+    name: cloud-config-center
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+    config:
+      server:
+        git:
+          uri: https://github.com/1040015708/zzyybs-springcloud-config.git
+          search-paths:
+            - zzyybs-springcloud-config
+          label: master
+#RabbitMQ相关配置
+    rabbitmq:
+      host: localhost
+      port: 5672
+      username: guest
+      password: guest
+
+#RabbitMQ相关配置,暴露bus刷新的端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-refresh'
